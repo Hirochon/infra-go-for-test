@@ -35,4 +35,4 @@ jobs:
           MYSQL_EXTRA_PROPERTIES: ""
         run: |
           make migrate-up
-          go test ./... -v
+          go test ./... -v -cover
