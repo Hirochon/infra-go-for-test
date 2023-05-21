@@ -1,0 +1,20 @@
+version: "2"
+sql:
+  - schema: "../migration/schema/"
+    queries: "./schema/"
+    engine: "mysql"
+    gen:
+      go:
+        package: "sqlcgenmodel"
+        out: "./sqlcgenmodel"
+        emit_json_tags: true
+        json_tags_case_style: "camel"
+  - schema: "../migration/schema/"
+    queries: "./testdata/"
+    engine: "mysql"
+    gen:
+      go:
+        package: "sqlcgentestmodel"
+        out: "./sqlcgentestmodel"
+        emit_json_tags: true
+        json_tags_case_style: "camel"
