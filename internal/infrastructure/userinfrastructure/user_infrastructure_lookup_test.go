@@ -49,15 +49,15 @@ func testUserRepositoryLookUpFailed(ctx context.Context, t *testing.T, userRepos
 		id       string
 	}{
 		{
-			scenario: "異常なユーザーIDを渡した場合、ユーザーIDが返却される①",
+			scenario: "異常なユーザーIDを渡した場合、エラーが発生する①",
 			id:       "01H0YHVK6NREDFDEK81YT1ERKR1",
 		},
 		{
-			scenario: "異常なユーザーIDを渡した場合、ユーザーIDが返却される②",
+			scenario: "異常なユーザーIDを渡した場合、エラーが発生する②",
 			id:       "01H0YHVK6MK92QZ1SZD2HAXEZ",
 		},
 		{
-			scenario: "異常なユーザーIDを渡した場合、ユーザーIDが返却される③",
+			scenario: "異常なユーザーIDを渡した場合、エラーが発生する③",
 			id:       "",
 		},
 	}
