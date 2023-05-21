@@ -1,0 +1,57 @@
+version: "3.8"
+
+volumes:
+  mysql-data:
+    driver: local
+
+services:
+  test-server:
+    build: .
+    container_name: test-server
+    working_dir: /go/src/test-server
+    tty: true
+    stdin_open: true
+    environment:
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+      - MYSQL_HOST
+      - MYSQL_DATABASE
+      - MYSQL_EXTRA_PROPERTIES
+    volumes:
+      - .:/go/src/test-server
+    ports:
+      - 7070:7070
+    depends_on:
+      - db-mysql
+  
+  migrate-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.migrate
+    container_name: migrate-server
+    working_dir: /go/src/test-server
+    tty: true
+    stdin_open: true
+    environment:
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+      - MYSQL_HOST
+      - MYSQL_DATABASE
+      - MYSQL_EXTRA_PROPERTIES
+    volumes:
+      - .:/go/src/test-server
+    depends_on:
+      - db-mysql
+
+  db-mysql:
+    image: mysql:8.0.23
+    environment:
+      - MYSQL_USER
+      - MYSQL_ROOT_PASSWORD
+      - MYSQL_PASSWORD
+      - MYSQL_DATABASE
+      - MYSQL_RANDOM_ROOT_PASSWORD
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql-data:/var/lib/mysql
