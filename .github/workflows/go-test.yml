@@ -1,0 +1,38 @@
+name: go-test
+on:
+  push:
+jobs:
+  go-test:
+    services:
+      mysql:
+        image: mysql:8.0.23
+        env:
+          MYSQL_USER: user
+          MYSQL_ROOT_PASSWORD: root_password
+          MYSQL_PASSWORD: password
+          MYSQL_DATABASE: test-db
+          MYSQL_ALLOW_EMPTY_PASSWORD: no
+          MYSQL_RANDOM_ROOT_PASSWORD: no
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
+        with:
+          go-version-file: go.mod
+          cache: true
+          cache-dependency-path: go.sum
+      - name: go install
+        run: go install github.com/rubenv/sql-migrate/...@v1.4.0
+      - name: build & test
+        env:
+          MYSQL_USER: user
+          MYSQL_PASSWORD: password
+          MYSQL_HOST: localhost
+          MYSQL_DATABASE: test-db
+          MYSQL_EXTRA_PROPERTIES: ""
+        run: |
+          make migrate-up
+          go test ./... -v
